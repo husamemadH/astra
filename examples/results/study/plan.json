@@ -1,0 +1,722 @@
+[
+  {
+    "design": "pool",
+    "counters": "long-adder",
+    "workers": 24,
+    "connections": 24,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "pool",
+    "counters": "synchronized",
+    "workers": 12,
+    "connections": 12,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "pool",
+    "counters": "synchronized",
+    "workers": 2,
+    "connections": 2,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "synchronized",
+    "workers": 8,
+    "connections": 8,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "synchronized",
+    "workers": 1,
+    "connections": 1,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "long-adder",
+    "workers": 4,
+    "connections": 4,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "pool",
+    "counters": "long-adder",
+    "workers": 8,
+    "connections": 8,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "pool",
+    "counters": "long-adder",
+    "workers": 12,
+    "connections": 12,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "pool",
+    "counters": "synchronized",
+    "workers": 24,
+    "connections": 24,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "long-adder",
+    "workers": 2,
+    "connections": 2,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "pool",
+    "counters": "synchronized",
+    "workers": 12,
+    "connections": 12,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "pool",
+    "counters": "long-adder",
+    "workers": 2,
+    "connections": 2,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "long-adder",
+    "workers": 12,
+    "connections": 12,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "pool",
+    "counters": "synchronized",
+    "workers": 4,
+    "connections": 4,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "long-adder",
+    "workers": 6,
+    "connections": 6,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "synchronized",
+    "workers": 12,
+    "connections": 12,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "synchronized",
+    "workers": 8,
+    "connections": 8,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "pool",
+    "counters": "long-adder",
+    "workers": 4,
+    "connections": 4,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "long-adder",
+    "workers": 1,
+    "connections": 1,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "synchronized",
+    "workers": 6,
+    "connections": 6,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "pool",
+    "counters": "synchronized",
+    "workers": 8,
+    "connections": 8,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "synchronized",
+    "workers": 2,
+    "connections": 2,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "synchronized",
+    "workers": 4,
+    "connections": 4,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "synchronized",
+    "workers": 4,
+    "connections": 4,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "long-adder",
+    "workers": 4,
+    "connections": 4,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "pool",
+    "counters": "synchronized",
+    "workers": 6,
+    "connections": 6,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "synchronized",
+    "workers": 12,
+    "connections": 12,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "synchronized",
+    "workers": 24,
+    "connections": 24,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "long-adder",
+    "workers": 8,
+    "connections": 8,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "pool",
+    "counters": "long-adder",
+    "workers": 2,
+    "connections": 2,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "pool",
+    "counters": "long-adder",
+    "workers": 4,
+    "connections": 4,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "pool",
+    "counters": "long-adder",
+    "workers": 8,
+    "connections": 8,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "long-adder",
+    "workers": 1,
+    "connections": 1,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "long-adder",
+    "workers": 2,
+    "connections": 2,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "synchronized",
+    "workers": 24,
+    "connections": 24,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "pool",
+    "counters": "synchronized",
+    "workers": 2,
+    "connections": 2,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "long-adder",
+    "workers": 6,
+    "connections": 6,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "pool",
+    "counters": "synchronized",
+    "workers": 1,
+    "connections": 1,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "pool",
+    "counters": "synchronized",
+    "workers": 4,
+    "connections": 4,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "long-adder",
+    "workers": 1,
+    "connections": 1,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "pool",
+    "counters": "long-adder",
+    "workers": 6,
+    "connections": 6,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "synchronized",
+    "workers": 8,
+    "connections": 8,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "pool",
+    "counters": "long-adder",
+    "workers": 1,
+    "connections": 1,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "long-adder",
+    "workers": 24,
+    "connections": 24,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "baseline",
+    "counters": "long-adder",
+    "workers": 1,
+    "connections": 1,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "baseline",
+    "counters": "long-adder",
+    "workers": 1,
+    "connections": 1,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "pool",
+    "counters": "synchronized",
+    "workers": 6,
+    "connections": 6,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "pool",
+    "counters": "long-adder",
+    "workers": 2,
+    "connections": 2,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "long-adder",
+    "workers": 24,
+    "connections": 24,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "pool",
+    "counters": "synchronized",
+    "workers": 12,
+    "connections": 12,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "pool",
+    "counters": "long-adder",
+    "workers": 12,
+    "connections": 12,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "synchronized",
+    "workers": 4,
+    "connections": 4,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "pool",
+    "counters": "synchronized",
+    "workers": 24,
+    "connections": 24,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "pool",
+    "counters": "synchronized",
+    "workers": 6,
+    "connections": 6,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "long-adder",
+    "workers": 6,
+    "connections": 6,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "pool",
+    "counters": "long-adder",
+    "workers": 4,
+    "connections": 4,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "pool",
+    "counters": "synchronized",
+    "workers": 8,
+    "connections": 8,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "baseline",
+    "counters": "synchronized",
+    "workers": 1,
+    "connections": 1,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "long-adder",
+    "workers": 8,
+    "connections": 8,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "baseline",
+    "counters": "long-adder",
+    "workers": 1,
+    "connections": 1,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "long-adder",
+    "workers": 8,
+    "connections": 8,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "pool",
+    "counters": "synchronized",
+    "workers": 2,
+    "connections": 2,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "pool",
+    "counters": "long-adder",
+    "workers": 6,
+    "connections": 6,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "pool",
+    "counters": "long-adder",
+    "workers": 1,
+    "connections": 1,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "synchronized",
+    "workers": 12,
+    "connections": 12,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "pool",
+    "counters": "long-adder",
+    "workers": 24,
+    "connections": 24,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "pool",
+    "counters": "synchronized",
+    "workers": 4,
+    "connections": 4,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "long-adder",
+    "workers": 4,
+    "connections": 4,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "synchronized",
+    "workers": 24,
+    "connections": 24,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "synchronized",
+    "workers": 2,
+    "connections": 2,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "pool",
+    "counters": "synchronized",
+    "workers": 8,
+    "connections": 8,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "baseline",
+    "counters": "synchronized",
+    "workers": 1,
+    "connections": 1,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "pool",
+    "counters": "long-adder",
+    "workers": 1,
+    "connections": 1,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "long-adder",
+    "workers": 2,
+    "connections": 2,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "baseline",
+    "counters": "synchronized",
+    "workers": 1,
+    "connections": 1,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "long-adder",
+    "workers": 12,
+    "connections": 12,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "pool",
+    "counters": "long-adder",
+    "workers": 24,
+    "connections": 24,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "synchronized",
+    "workers": 6,
+    "connections": 6,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "pool",
+    "counters": "long-adder",
+    "workers": 12,
+    "connections": 12,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "synchronized",
+    "workers": 1,
+    "connections": 1,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "synchronized",
+    "workers": 1,
+    "connections": 1,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "synchronized",
+    "workers": 6,
+    "connections": 6,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  {
+    "design": "pool",
+    "counters": "synchronized",
+    "workers": 24,
+    "connections": 24,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "long-adder",
+    "workers": 12,
+    "connections": 12,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "long-adder",
+    "workers": 24,
+    "connections": 24,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "pool",
+    "counters": "long-adder",
+    "workers": 6,
+    "connections": 6,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "thread-per-connection",
+    "counters": "synchronized",
+    "workers": 2,
+    "connections": 2,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "pool",
+    "counters": "synchronized",
+    "workers": 1,
+    "connections": 1,
+    "pipeline": 16,
+    "repetition": 3
+  },
+  {
+    "design": "pool",
+    "counters": "long-adder",
+    "workers": 8,
+    "connections": 8,
+    "pipeline": 16,
+    "repetition": 2
+  },
+  {
+    "design": "pool",
+    "counters": "synchronized",
+    "workers": 1,
+    "connections": 1,
+    "pipeline": 16,
+    "repetition": 1
+  }
+]

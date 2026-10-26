@@ -1,0 +1,90 @@
+{
+  "connections": {
+    "active": [],
+    "history": [
+      {
+        "id": 4,
+        "remote": "/127.0.0.1:51416",
+        "local": "/127.0.0.1:43389",
+        "acceptedAt": "2026-10-26T15:16:34.636067078Z",
+        "closedAt": "2026-10-26T15:16:39.135083174Z",
+        "state": "CLOSED",
+        "ageMillis": 4499.011134,
+        "idleMillis": 1.790027,
+        "queueWaitMillis": 9.599431,
+        "bytes": 2267021312,
+        "requests": 2162,
+        "reason": "NORMAL"
+      },
+      {
+        "id": 1,
+        "remote": "/127.0.0.1:51388",
+        "local": "/127.0.0.1:43389",
+        "acceptedAt": "2026-10-26T15:16:34.620228655Z",
+        "closedAt": "2026-10-26T15:16:39.138205766Z",
+        "state": "CLOSED",
+        "ageMillis": 4517.95947,
+        "idleMillis": 0.625436,
+        "queueWaitMillis": 13.623034,
+        "bytes": 2386558976,
+        "requests": 2276,
+        "reason": "NORMAL"
+      },
+      {
+        "id": 3,
+        "remote": "/127.0.0.1:51404",
+        "local": "/127.0.0.1:43389",
+        "acceptedAt": "2026-10-26T15:16:34.635090198Z",
+        "closedAt": "2026-10-26T15:16:39.139966826Z",
+        "state": "CLOSED",
+        "ageMillis": 4504.87662,
+        "idleMillis": 0.268201,
+        "queueWaitMillis": 1.062433,
+        "bytes": 3828350976,
+        "requests": 3651,
+        "reason": "NORMAL"
+      },
+      {
+        "id": 2,
+        "remote": "/127.0.0.1:51402",
+        "local": "/127.0.0.1:43389",
+        "acceptedAt": "2026-10-26T15:16:34.633418700Z",
+        "closedAt": "2026-10-26T15:16:39.142733234Z",
+        "state": "CLOSED",
+        "ageMillis": 4509.313998,
+        "idleMillis": 0.184409,
+        "queueWaitMillis": 1.558867,
+        "bytes": 3284140032,
+        "requests": 3132,
+        "reason": "NORMAL"
+      }
+    ],
+    "evicted": 0
+  },
+  "metrics": {
+    "nano_time": 22712169015809,
+    "cpu_nanos": 6690000000,
+    "heap_used_bytes": 8084624,
+    "threads": 8,
+    "gc_millis": 18,
+    "gc_count": 2,
+    "rss_bytes": 72359936,
+    "bytes": 11766071296,
+    "requests": 11221,
+    "active": 0,
+    "accepted": 4,
+    "closed": 4,
+    "rejected": 0,
+    "failed_requests": 0,
+    "protocol_errors": 0,
+    "io_errors": 0,
+    "thread_start_failures": 0,
+    "processing": 0,
+    "peak_processing": 4,
+    "queued": 0,
+    "peak_queue": 0,
+    "send_buffer_bytes": 1313280,
+    "receive_buffer_bytes": 65536
+  },
+  "complete": true
+}

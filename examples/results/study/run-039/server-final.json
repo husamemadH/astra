@@ -1,0 +1,90 @@
+{
+  "connections": {
+    "active": [],
+    "history": [
+      {
+        "id": 2,
+        "remote": "/127.0.0.1:45162",
+        "local": "/127.0.0.1:41595",
+        "acceptedAt": "2026-10-26T15:09:27.579007955Z",
+        "closedAt": "2026-10-26T15:09:32.080571444Z",
+        "state": "CLOSED",
+        "ageMillis": 4501.557908,
+        "idleMillis": 0.860956,
+        "queueWaitMillis": 0.584175,
+        "bytes": 6090129408,
+        "requests": 5808,
+        "reason": "NORMAL"
+      },
+      {
+        "id": 1,
+        "remote": "/127.0.0.1:45156",
+        "local": "/127.0.0.1:41595",
+        "acceptedAt": "2026-10-26T15:09:27.574457074Z",
+        "closedAt": "2026-10-26T15:09:32.081337070Z",
+        "state": "CLOSED",
+        "ageMillis": 4506.884201,
+        "idleMillis": 1.169114,
+        "queueWaitMillis": 4.177815,
+        "bytes": 6320816128,
+        "requests": 6028,
+        "reason": "NORMAL"
+      },
+      {
+        "id": 3,
+        "remote": "/127.0.0.1:45178",
+        "local": "/127.0.0.1:41595",
+        "acceptedAt": "2026-10-26T15:09:27.579316685Z",
+        "closedAt": "2026-10-26T15:09:32.084745680Z",
+        "state": "CLOSED",
+        "ageMillis": 4505.427788,
+        "idleMillis": 0.267246,
+        "queueWaitMillis": 0.420888,
+        "bytes": 6042943488,
+        "requests": 5763,
+        "reason": "NORMAL"
+      },
+      {
+        "id": 4,
+        "remote": "/127.0.0.1:45184",
+        "local": "/127.0.0.1:41595",
+        "acceptedAt": "2026-10-26T15:09:27.579690713Z",
+        "closedAt": "2026-10-26T15:09:32.085800535Z",
+        "state": "CLOSED",
+        "ageMillis": 4506.108502,
+        "idleMillis": 0.18586,
+        "queueWaitMillis": 0.351666,
+        "bytes": 6171918336,
+        "requests": 5886,
+        "reason": "NORMAL"
+      }
+    ],
+    "evicted": 0
+  },
+  "complete": true,
+  "metrics": {
+    "nano_time": 22285122534117,
+    "cpu_nanos": 11270000000,
+    "heap_used_bytes": 34277072,
+    "threads": 8,
+    "gc_millis": 4,
+    "gc_count": 1,
+    "rss_bytes": 106864640,
+    "bytes": 24625807360,
+    "requests": 23485,
+    "active": 0,
+    "accepted": 4,
+    "closed": 4,
+    "rejected": 0,
+    "failed_requests": 0,
+    "protocol_errors": 0,
+    "io_errors": 0,
+    "thread_start_failures": 0,
+    "processing": 0,
+    "peak_processing": 4,
+    "queued": 0,
+    "peak_queue": 0,
+    "send_buffer_bytes": 1313280,
+    "receive_buffer_bytes": 65536
+  }
+}

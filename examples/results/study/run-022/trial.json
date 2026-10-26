@@ -1,0 +1,8 @@
+{
+  "design": "thread-per-connection",
+  "counters": "synchronized",
+  "workers": 2,
+  "connections": 2,
+  "pipeline": 16,
+  "repetition": 2
+}

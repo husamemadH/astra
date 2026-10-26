@@ -1,0 +1,49 @@
+{
+  "active": [
+    {
+      "id": 1,
+      "remote": "/127.0.0.1:52328",
+      "local": "/127.0.0.1:39919",
+      "acceptedAt": "2026-10-26T15:13:58.408569917Z",
+      "closedAt": null,
+      "state": "PROCESSING",
+      "ageMillis": 8.248987,
+      "idleMillis": 3.606566,
+      "queueWaitMillis": 4.642421,
+      "bytes": 0,
+      "requests": 0,
+      "reason": null
+    },
+    {
+      "id": 2,
+      "remote": "/127.0.0.1:52336",
+      "local": "/127.0.0.1:39919",
+      "acceptedAt": "2026-10-26T15:13:58.413596610Z",
+      "closedAt": null,
+      "state": "QUEUED",
+      "ageMillis": 3.217521,
+      "idleMillis": 3.217521,
+      "queueWaitMillis": 3.217521,
+      "bytes": 0,
+      "requests": 0,
+      "reason": null
+    }
+  ],
+  "history": [
+    {
+      "id": 3,
+      "remote": "/127.0.0.1:52342",
+      "local": "/127.0.0.1:39919",
+      "acceptedAt": "2026-10-26T15:13:58.415499203Z",
+      "closedAt": "2026-10-26T15:13:58.416044970Z",
+      "state": "CLOSED",
+      "ageMillis": 0.542569,
+      "idleMillis": 0.542569,
+      "queueWaitMillis": 0.542569,
+      "bytes": 0,
+      "requests": 0,
+      "reason": "OVERLOAD_REJECTION"
+    }
+  ],
+  "evicted": 0
+}

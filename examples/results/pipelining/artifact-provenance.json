@@ -1,0 +1,14 @@
+{
+  "artifactSourceRevision": "446ae4f9dd261d2aa5149d2ab940066dab4c169a",
+  "artifactSha256": "191fb2f55f6a8960a331098f8f46b9534e1f01fd5bfeeb155a58d37a3e4b3261",
+  "javaHome": "/usr/lib/jvm/java-21-openjdk",
+  "allowedCpuIds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "note": "These experiments use the identical frozen lesson-09 JAR. environment.json revision describes the working checkout at launch; artifactSourceRevision identifies the actual executable source."
+}

@@ -1,0 +1,40 @@
+{
+  "workers": [
+    1,
+    2,
+    4,
+    6,
+    8,
+    12,
+    24
+  ],
+  "pipelineDepths": [
+    16
+  ],
+  "counters": [
+    "synchronized",
+    "long-adder"
+  ],
+  "repetitions": 3,
+  "maxWorkers": 64,
+  "maxThreadsPerProcess": 512,
+  "maxRssMiBPerProcess": 1024,
+  "warmupSeconds": 1.5,
+  "durationSeconds": 3.0,
+  "drainSeconds": 10.0,
+  "payloadBytes": 1048576,
+  "seed": 20261026,
+  "chunkBytes": 65536,
+  "queueCapacity": 64,
+  "metricsIntervalMillis": 500,
+  "checksum": false,
+  "overload": true,
+  "serverJvmArgs": [
+    "-Xms128m",
+    "-Xmx256m"
+  ],
+  "clientJvmArgs": [
+    "-Xms128m",
+    "-Xmx256m"
+  ]
+}

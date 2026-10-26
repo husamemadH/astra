@@ -1,0 +1,8 @@
+{
+  "design": "pool",
+  "counters": "synchronized",
+  "workers": 1,
+  "connections": 1,
+  "pipeline": 1,
+  "repetition": 3
+}

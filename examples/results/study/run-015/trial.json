@@ -1,0 +1,8 @@
+{
+  "design": "thread-per-connection",
+  "counters": "long-adder",
+  "workers": 6,
+  "connections": 6,
+  "pipeline": 16,
+  "repetition": 2
+}

@@ -1,0 +1,90 @@
+{
+  "complete": true,
+  "metrics": {
+    "nano_time": 22634528947242,
+    "cpu_nanos": 6700000000,
+    "heap_used_bytes": 19619784,
+    "threads": 8,
+    "gc_millis": 9,
+    "gc_count": 2,
+    "rss_bytes": 80809984,
+    "bytes": 12861833216,
+    "requests": 12266,
+    "active": 0,
+    "accepted": 4,
+    "closed": 4,
+    "rejected": 0,
+    "failed_requests": 0,
+    "protocol_errors": 0,
+    "io_errors": 0,
+    "thread_start_failures": 0,
+    "processing": 0,
+    "peak_processing": 4,
+    "queued": 0,
+    "peak_queue": 0,
+    "send_buffer_bytes": 1313280,
+    "receive_buffer_bytes": 65536
+  },
+  "connections": {
+    "active": [],
+    "history": [
+      {
+        "id": 3,
+        "remote": "/127.0.0.1:33662",
+        "local": "/127.0.0.1:45099",
+        "acceptedAt": "2026-10-26T15:15:16.942325296Z",
+        "closedAt": "2026-10-26T15:15:21.448452767Z",
+        "state": "CLOSED",
+        "ageMillis": 4506.120641,
+        "idleMillis": 4.471805,
+        "queueWaitMillis": 1.623385,
+        "bytes": 4570742784,
+        "requests": 4359,
+        "reason": "NORMAL"
+      },
+      {
+        "id": 1,
+        "remote": "/127.0.0.1:33646",
+        "local": "/127.0.0.1:45099",
+        "acceptedAt": "2026-10-26T15:15:16.935127627Z",
+        "closedAt": "2026-10-26T15:15:21.452422100Z",
+        "state": "CLOSED",
+        "ageMillis": 4517.298314,
+        "idleMillis": 3.061961,
+        "queueWaitMillis": 6.648349,
+        "bytes": 2994733056,
+        "requests": 2856,
+        "reason": "NORMAL"
+      },
+      {
+        "id": 4,
+        "remote": "/127.0.0.1:33666",
+        "local": "/127.0.0.1:45099",
+        "acceptedAt": "2026-10-26T15:15:16.942829730Z",
+        "closedAt": "2026-10-26T15:15:21.452742527Z",
+        "state": "CLOSED",
+        "ageMillis": 4509.911634,
+        "idleMillis": 0.418755,
+        "queueWaitMillis": 5.558846,
+        "bytes": 2626682880,
+        "requests": 2505,
+        "reason": "NORMAL"
+      },
+      {
+        "id": 2,
+        "remote": "/127.0.0.1:33658",
+        "local": "/127.0.0.1:45099",
+        "acceptedAt": "2026-10-26T15:15:16.941446669Z",
+        "closedAt": "2026-10-26T15:15:21.457335380Z",
+        "state": "CLOSED",
+        "ageMillis": 4515.888033,
+        "idleMillis": 2.033056,
+        "queueWaitMillis": 0.926819,
+        "bytes": 2669674496,
+        "requests": 2546,
+        "reason": "NORMAL"
+      }
+    ],
+    "evicted": 0
+  }
+}

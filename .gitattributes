@@ -1,0 +1,2 @@
+# Collapse generated experiment evidence in GitHub diffs; source and lessons remain easy to review.
+examples/results/** linguist-generated=true

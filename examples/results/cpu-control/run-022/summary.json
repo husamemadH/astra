@@ -1,0 +1,27 @@
+{
+  "run": "run-022",
+  "trial": {
+    "design": "pool",
+    "counters": "long-adder",
+    "workers": 4,
+    "connections": 4,
+    "pipeline": 16,
+    "repetition": 1
+  },
+  "complete": true,
+  "serverMiBs": 3008.746007739794,
+  "clientMiBs": 3007.3333333333335,
+  "requestsPerSecond": 3009.0808709571274,
+  "p50Ms": 5.767168,
+  "p95Ms": 10.48576,
+  "p99Ms": 12.845056,
+  "serverCpuPercent": 139.97282484532374,
+  "clientCpuPercent": 133.03769170666357,
+  "serverSeconds": 2.98629395,
+  "failedRequests": 0,
+  "rejected": 0,
+  "serverGcMillis": 3,
+  "serverBytes": 9421455360,
+  "peakProcessing": 4,
+  "error": ""
+}

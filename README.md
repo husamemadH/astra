@@ -32,6 +32,10 @@ Open `results/smoke/report.html`. The smoke run checks functionality; its short 
 - [Study guide](docs/STUDY_GUIDE.md): the reading order and exercises.
 - [Architecture](docs/ARCHITECTURE.md): how one request moves through the system.
 - [CLI reference](docs/CLI.md): every option, result format, and experiment controls.
+- [Measured results](docs/RESULTS.md): 177 saved trials, CPU-capacity control, pipelining comparison, and limitations.
+- [Requirement map](docs/REQUIREMENTS.md): where each source requirement is implemented and tested.
 - [Implementation specification](SPEC.md): requirements and acceptance criteria.
 
 All application traffic uses TCP. The runner controls local JVMs through process pipes. No account, database, web service, or GUI is needed to build or run Astra.
+
+The final Java 21 build passes 38 tests, including a 500 MiB transfer in a 128 MiB test JVM. GitHub Actions runs the tests and a separate-JVM smoke benchmark. Annotated tags `lesson-01` through `lesson-12` identify the learning checkpoints.

@@ -1,0 +1,48 @@
+{
+  "complete": true,
+  "connections": {
+    "active": [],
+    "history": [
+      {
+        "id": 1,
+        "remote": "/127.0.0.1:57738",
+        "local": "/127.0.0.1:39441",
+        "acceptedAt": "2026-10-26T15:15:11.847802122Z",
+        "closedAt": "2026-10-26T15:15:16.353865241Z",
+        "state": "CLOSED",
+        "ageMillis": 4506.064698,
+        "idleMillis": 1.088079,
+        "queueWaitMillis": 2.542407,
+        "bytes": 8803844096,
+        "requests": 8396,
+        "reason": "NORMAL"
+      }
+    ],
+    "evicted": 0
+  },
+  "metrics": {
+    "nano_time": 22629389054920,
+    "cpu_nanos": 4340000000,
+    "heap_used_bytes": 9629424,
+    "threads": 8,
+    "gc_millis": 4,
+    "gc_count": 2,
+    "rss_bytes": 75927552,
+    "bytes": 8803844096,
+    "requests": 8396,
+    "active": 0,
+    "accepted": 1,
+    "closed": 1,
+    "rejected": 0,
+    "failed_requests": 0,
+    "protocol_errors": 0,
+    "io_errors": 0,
+    "thread_start_failures": 0,
+    "processing": 0,
+    "peak_processing": 1,
+    "queued": 0,
+    "peak_queue": 0,
+    "send_buffer_bytes": 1313280,
+    "receive_buffer_bytes": 65536
+  }
+}

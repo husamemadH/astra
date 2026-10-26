@@ -37,6 +37,8 @@ Use the lesson and commands **from that commit**: the CLI evolves from positiona
 | 08 | [Operation](lessons/08-operation.md) | How to inspect the server and interpret its metrics |
 | 09 | [Experiments](lessons/09-experiments.md) | How to compare designs fairly and preserve raw evidence |
 | 10 | [Failures](lessons/10-failures.md) | Why cleanup and race tests matter as much as successful traffic |
+| 11 | [Admission race](lessons/11-admission.md) | Why checking a condition and acting on it must be coordinated |
+| 12 | [Results](lessons/12-results.md) | How controlled experiments support a qualified conclusion |
 
 ## A manageable way to study each stage
 
@@ -65,3 +67,9 @@ Useful focused commands:
 - **Increase workers beyond processor count.** Throughput may flatten or decline while latency rises. Compare client and server CPU before assigning a cause.
 
 Read [ARCHITECTURE.md](ARCHITECTURE.md) when you want the complete picture. Return to the small lesson files whenever the full code feels too dense.
+
+The final [results lesson](lessons/12-results.md) explains the saved measurements and controlled follow-ups. Annotated tags `lesson-01` through `lesson-12` let you use names instead of hashes; for example:
+
+```sh
+git worktree add --detach ../astra-lesson lesson-03
+```

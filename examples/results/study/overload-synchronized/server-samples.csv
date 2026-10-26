@@ -1,0 +1,3 @@
+nano_time,cpu_nanos,heap_used_bytes,threads,gc_millis,gc_count,rss_bytes,bytes,requests,active,accepted,closed,rejected,failed_requests,protocol_errors,io_errors,thread_start_failures,processing,peak_processing,queued,peak_queue,send_buffer_bytes,receive_buffer_bytes
+22551252281805,170000000,4245120,9,0,0,50851840,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+22551448975004,500000000,8439424,7,0,0,63119360,1024,1,0,4,4,1,0,0,0,0,0,1,0,1,1313280,65536

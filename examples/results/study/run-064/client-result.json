@@ -1,0 +1,22 @@
+{
+  "complete": true,
+  "started": 7782,
+  "acknowledged": 7782,
+  "failedRequests": 0,
+  "measuredStarted": 5446,
+  "measuredAcknowledged": 5446,
+  "measuredFailed": 0,
+  "acknowledgedBytesInWindow": 5715787776,
+  "seconds": 3.0,
+  "mibPerSecond": 1817.0,
+  "requestsPerSecond": 1817.0,
+  "p50Millis": 0.671744,
+  "p95Millis": 5.505024,
+  "p99Millis": 10.48576,
+  "latencySamples": 5446,
+  "peakOutstandingPerConnection": 16,
+  "connectionFailures": 0,
+  "effectiveSendBuffer": 1313280,
+  "effectiveReceiveBuffer": 65536,
+  "errors": []
+}

@@ -1,0 +1,8 @@
+{
+  "design": "pool",
+  "counters": "long-adder",
+  "workers": 2,
+  "connections": 2,
+  "pipeline": 16,
+  "repetition": 1
+}
