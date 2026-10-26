@@ -62,8 +62,22 @@ public final class ProcessMetrics {
         }
         try {
             Process git = new ProcessBuilder("git", "rev-parse", "HEAD").redirectError(ProcessBuilder.Redirect.DISCARD).start();
-            result.put("revision", new String(git.getInputStream().readAllBytes()).trim()); git.waitFor();
-        } catch (Exception e) { result.put("revision", "unavailable"); }
+            result.put("checkout_revision", new String(git.getInputStream().readAllBytes()).trim()); git.waitFor();
+        } catch (Exception e) { result.put("checkout_revision", "unavailable"); }
+        try {
+            Path artifact = Path.of(ProcessMetrics.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            result.put("artifact_path", artifact.toString());
+            if (Files.isRegularFile(artifact)) {
+                var digest = java.security.MessageDigest.getInstance("SHA-256");
+                try (var input = Files.newInputStream(artifact)) {
+                    byte[] buffer = new byte[65_536];
+                    int count;
+                    while ((count = input.read(buffer)) >= 0) digest.update(buffer, 0, count);
+                }
+                result.put("artifact_sha256", HexFormat.of().formatHex(digest.digest()));
+            } else result.put("artifact_sha256", "running from classes directory");
+        } catch (Exception e) { result.put("artifact_sha256", "unavailable"); }
+        result.put("revision_note", "checkout_revision identifies the launch directory's Git HEAD; artifact_sha256 identifies the actual executable");
         return result;
     }
 }

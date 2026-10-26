@@ -23,13 +23,20 @@ public final class ConnectionRegistry {
         private final String acceptedAt = Instant.now().toString();
         private final String remote, local;
         private long lastActivity = acceptedNanos, startedNanos, bytes, requests;
-        private boolean started, finished;
+        private boolean started, finished, submitted;
         private Reason reason;
 
         private Entry(long id, Socket socket) {
             this.id = id; this.socket = socket;
             remote = String.valueOf(socket.getRemoteSocketAddress());
             local = String.valueOf(socket.getLocalSocketAddress());
+        }
+        /** Admission and queue expiry must not pass one another between the check and enqueue. */
+        public synchronized boolean enqueueIfOpen(Runnable enqueue) {
+            if (submitted || started || finished || reason != null) return false;
+            enqueue.run(); // Only a nonblocking executor submission; never socket I/O.
+            submitted = true;
+            return true;
         }
         public synchronized boolean start() {
             if (started || finished || reason != null) return false;

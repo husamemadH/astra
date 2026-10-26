@@ -83,6 +83,29 @@ class RegistryTest {
         assertEquals(2, registry.snapshot().history().size());
         assertEquals(1, registry.snapshot().evicted());
     }
+    @Test void expiryCannotRemoveATaskBeforeItIsEnqueuedAndLeaveAStaleQueueEntry() throws Exception {
+        try (var pool = Executors.newFixedThreadPool(2)) {
+            for (int i = 0; i < 100; i++) {
+                var registry = new ConnectionRegistry(new LongAdderCounters(), 2);
+                try (var socket = new Socket()) {
+                    var entry = registry.accept(socket);
+                    var queue = new ArrayBlockingQueue<ConnectionRegistry.Entry>(1);
+                    var gate = new CountDownLatch(1);
+                    var submit = pool.submit(() -> { gate.await(); return entry.enqueueIfOpen(() -> queue.add(entry)); });
+                    var expire = pool.submit(() -> {
+                        gate.await();
+                        entry.expire(System.nanoTime(), Long.MAX_VALUE, 0);
+                        queue.remove(entry);
+                        registry.finish(entry, ConnectionRegistry.Reason.QUEUE_TIMEOUT);
+                        return true;
+                    });
+                    gate.countDown(); submit.get(5, TimeUnit.SECONDS); expire.get(5, TimeUnit.SECONDS);
+                    assertTrue(queue.isEmpty());
+                    assertEquals(0, registry.size());
+                }
+            }
+        }
+    }
     @Test void startAndQueueExpiryCannotBothWin() throws Exception {
         for (int i = 0; i < 100; i++) {
             var registry = new ConnectionRegistry(new LongAdderCounters(), 2);

@@ -80,10 +80,10 @@ public final class TcpServer implements AutoCloseable {
                         }
                     }
                     case POOL -> {
-                        try { pool.execute(task); peakQueue.accumulateAndGet(queued(), Math::max); }
+                        try { entry.enqueueIfOpen(() -> pool.execute(task)); peakQueue.accumulateAndGet(queued(), Math::max); }
                         catch (RejectedExecutionException e) {
-                            counters.increment(REJECTED);
-                            closeEntry(entry, Reason.OVERLOAD_REJECTION);
+                            if (running) counters.increment(REJECTED);
+                            closeEntry(entry, running ? Reason.OVERLOAD_REJECTION : Reason.SERVER_SHUTDOWN);
                         }
                     }
                 }
