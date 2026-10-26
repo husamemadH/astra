@@ -137,8 +137,7 @@ public final class BenchmarkRunner {
             JsonObject recovered;
             do { server.command("sample RECOVERY"); recovered = server.await("RECOVERY", deadline); }
             while (integer(recovered, "active") != 0);
-            // This control uses checksum=false, so only run the upload with the same setting.
-            if (!config.checksum && SimpleClient.upload("127.0.0.1", port, 1024, 1) != 1024) throw new IOException("Recovery upload failed");
+            if (SimpleClient.upload("127.0.0.1", port, 1024, 1, config.checksum) != 1024) throw new IOException("Recovery upload failed");
             server.command("stop"); JsonObject stopped = server.await("STOPPED", deadline);
             if (server.exit(deadline) != 0) throw new IOException("Overload server did not drain");
             Json.write(directory.resolve("evidence.json"), Map.of("saturated", saturated, "recovered", recovered, "final", stopped));

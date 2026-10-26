@@ -1,7 +1,6 @@
 package dev.astra.benchmark;
 
 import com.google.gson.*;
-import dev.astra.cli.Json;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
@@ -15,6 +14,9 @@ final class ChildJvm implements AutoCloseable {
     private final Thread reader;
     private final BenchmarkConfig config;
     private volatile IOException readFailure;
+    private volatile IOException budgetFailure;
+    private final ScheduledExecutorService watchdog = Executors.newSingleThreadScheduledExecutor(
+            Thread.ofPlatform().name("astra-child-watchdog").factory());
 
     ChildJvm(List<String> vmArgs, List<String> args, Path directory, String name, BenchmarkConfig config) throws IOException {
         this.config = config;
@@ -25,6 +27,10 @@ final class ChildJvm implements AutoCloseable {
         command.add("-cp"); command.add(System.getProperty("java.class.path")); command.add("dev.astra.Main"); command.addAll(args);
         process = new ProcessBuilder(command).redirectError(directory.resolve(name + "-stderr.log").toFile()).start();
         commands = process.outputWriter();
+        watchdog.scheduleWithFixedDelay(() -> {
+            try { if (process.isAlive()) budget(); }
+            catch (IOException e) { budgetFailure = e; process.destroyForcibly(); }
+        }, 100, 100, TimeUnit.MILLISECONDS);
         reader = Thread.ofPlatform().name("astra-child-output-" + name).start(() -> {
             try (var input = process.inputReader(); var log = Files.newBufferedWriter(directory.resolve(name + "-stdout.jsonl"))) {
                 String line;
@@ -41,6 +47,7 @@ final class ChildJvm implements AutoCloseable {
     void command(String command) throws IOException { commands.write(command); commands.newLine(); commands.flush(); }
     JsonObject await(String name, long deadline) throws Exception {
         while (System.nanoTime() < deadline) {
+            if (budgetFailure != null) throw budgetFailure;
             budget();
             JsonObject event = events.poll(100, TimeUnit.MILLISECONDS);
             if (event != null && event.get("event").getAsString().equals(name)) return event.getAsJsonObject("data");
@@ -69,6 +76,7 @@ final class ChildJvm implements AutoCloseable {
         return process.exitValue();
     }
     public void close() {
+        watchdog.shutdownNow();
         try { commands.close(); } catch (IOException ignored) { }
         if (process.isAlive()) process.destroy();
         try {

@@ -53,4 +53,23 @@ The output directory must be empty. Configurations are JSON with the fields docu
 
 A run has an external deadline of warm-up + measurement + drain + 30 seconds for startup/control. `maxWorkers` bounds the experiment matrix, while `maxThreadsPerProcess` and `maxRssMiBPerProcess` abort runaway child processes on Linux. These are runner safeguards, not a concurrency cap inside the unbounded server. OS resource checks are unavailable off Linux; deadlines still apply. `serverJvmArgs` and `clientJvmArgs` allow explicit heap/GC/profiling controls and are passed as argument lists, without a shell.
 
-`summary.csv` records MiB/s and Gbit/s; `report.html` shows median throughput and min/max whiskers, baseline references, and server/client CPU curves. Each trial has raw output, configuration, periodic samples, boundary snapshots, and final counters/history. Overload runs use W=1/Q=1, hold two connections open, prove the third is closed, and verify recovery. Server history includes queue waits and rejection reasons. For the checksum workload, the overload recovery control currently verifies emptying the registry; the primary trials verify checksum uploads.
+`summary.csv` records MiB/s and Gbit/s; `report.html` shows median throughput and min/max whiskers, baseline references, and server/client CPU curves. Each trial has raw output, configuration, periodic samples, boundary snapshots, and final counters/history. Overload runs use W=1/Q=1, hold two connections open, prove the third is closed, and verify recovery. Server history includes queue waits and rejection reasons.
+
+## Two registry demonstrations
+
+These Java integration tests perform and assert both scenarios without needing an extra TCP client tool:
+
+```sh
+./mvnw -Dtest=RegistryTest#lifecycleInspectionContainsActiveAndClosedClients test
+./mvnw -Dtest=RegistryTest#idleCleanupUsesRegistryAndAuditsHistoryWhileOtherClientWorks test
+```
+
+To observe them manually, run the server and type `connections` while a load client runs, then again after it finishes. For an idle client, Java's `jshell` can open a socket and keep it alive without sending data:
+
+```java
+var idle = new java.net.Socket("127.0.0.1", 9000);
+```
+
+With `--idle-timeout-ms 2000` on the server, `timeouts` will show its closed history entry after about two seconds. Run a second, active load client concurrently to see it continue processing. The retained timeout list is bounded by history capacity and is not a lifetime total.
+
+Later builds also record whole-host CPU busy/total ticks on Linux. Their delta ratio describes host utilization, not just Astra and not just a restricted affinity mask. This helps expose background competition on a shared workstation; the older checked-in experiment schema may omit these additional columns.

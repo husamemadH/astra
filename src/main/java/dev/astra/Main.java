@@ -43,7 +43,7 @@ public final class Main {
     }
     private static int benchmark(String[] args) throws Exception {
         var options = new Options(args, 1, "config", "output");
-        var config = options.has("config") ? Json.COMPACT.fromJson(Files.readString(Path.of(options.text("config", ""))), BenchmarkConfig.class) : new BenchmarkConfig();
+        var config = options.has("config") ? BenchmarkConfig.load(Path.of(options.text("config", ""))) : new BenchmarkConfig();
         if (config == null) throw new IllegalArgumentException("Benchmark configuration must be a JSON object");
         var summaries = new BenchmarkRunner(config, Path.of(options.text("output", "results/benchmark"))).run();
         Json.event("BENCHMARK_COMPLETE", Map.of("trials", summaries.size(), "output", options.text("output", "results/benchmark")));

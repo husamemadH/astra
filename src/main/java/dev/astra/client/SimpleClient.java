@@ -9,6 +9,10 @@ public final class SimpleClient {
     private SimpleClient() {}
 
     public static long upload(String host, int port, long payloadBytes, int requests) throws IOException {
+        return upload(host, port, payloadBytes, requests, false);
+    }
+
+    public static long upload(String host, int port, long payloadBytes, int requests, boolean checksum) throws IOException {
         try (Socket socket = new Socket()) {
             socket.connect(new InetSocketAddress(host, port), 5_000);
             socket.setSoTimeout(30_000);
@@ -18,7 +22,7 @@ public final class SimpleClient {
             byte[] chunk = Protocol.payloadBuffer(Protocol.CHUNK);
             long acknowledged = 0;
             for (long id = 1; id <= requests; id++) {
-                Protocol.request(out, id, payloadBytes, chunk, false);
+                Protocol.request(out, id, payloadBytes, chunk, checksum);
                 var ack = reader.read();
                 if (ack == null || ack.type() != Protocol.ACK || ack.id() != id || ack.value() != payloadBytes)
                     throw new IOException("Unexpected acknowledgement");

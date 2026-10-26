@@ -1,0 +1,27 @@
+name: Java 21 build and tests
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - run: ./mvnw --batch-mode clean verify
+      - name: Exercise separate JVMs and overload recovery
+        run: java -jar target/astra.jar benchmark --config experiments/smoke.json --output results/smoke
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: astra-build-and-smoke
+          path: |
+            target/astra.jar
+            target/surefire-reports
+            results/smoke

@@ -1,12 +1,37 @@
-# Astra
+# Astra — learn TCP scaling in Java
 
-A Java 21 laboratory for understanding TCP servers, threads, shared counters, and throughput ceilings. Start with [the learning guide](docs/STUDY_GUIDE.md), then follow the commits in chronological order.
+Astra implements the same streaming TCP protocol with three Java 21 server designs: a blocking baseline, one platform thread per connection, and a fixed pool with a bounded queue. A pipelined load client and experiment runner show how throughput, latency, shared counters, and backpressure change as concurrency increases.
 
-Build with Java 21 or later:
+**Start with [the study guide](docs/STUDY_GUIDE.md).** The Git history is deliberately ordered as a course. Each numbered commit adds one concept, working code, tests, and a short lesson. You can run earlier commits in a separate worktree.
+
+## Build and try it
+
+Install Java 21 or later. The Maven Wrapper supplies Maven; the first build downloads dependencies.
 
 ```sh
 ./mvnw clean verify
-java -jar target/astra.jar
+java -jar target/astra.jar server --design pool --workers 4 --counters long-adder
 ```
 
-The original implementation contract is in [SPEC.md](SPEC.md). The repository grows through small, explained lessons; later commits add the server, client, experiments, and measured results.
+In another terminal:
+
+```sh
+java -jar target/astra.jar client --connections 4 --pipeline-depth 16 --duration-seconds 10
+```
+
+Type `connections`, `timeouts`, or `sample` in the server terminal to inspect state. Type `stop` after the client finishes. To compare other designs, use `--design baseline` or `--design thread-per-connection` and omit `--workers`.
+
+## Run an experiment
+
+```sh
+java -jar target/astra.jar benchmark --config experiments/smoke.json --output results/smoke
+```
+
+Open `results/smoke/report.html`. The smoke run checks functionality; its short measurements are not performance conclusions. Use `experiments/default.json` for longer repeated trials. The output includes raw CSV samples, JSON configuration and summaries, per-process logs, and standalone SVG charts in an HTML report.
+
+- [Study guide](docs/STUDY_GUIDE.md): the reading order and exercises.
+- [Architecture](docs/ARCHITECTURE.md): how one request moves through the system.
+- [CLI reference](docs/CLI.md): every option, result format, and experiment controls.
+- [Implementation specification](SPEC.md): requirements and acceptance criteria.
+
+All application traffic uses TCP. The runner controls local JVMs through process pipes. No account, database, web service, or GUI is needed to build or run Astra.

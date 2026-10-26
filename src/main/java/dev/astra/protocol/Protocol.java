@@ -120,6 +120,8 @@ public final class Protocol {
 
     /** Constant memory regardless of logical request size. The caller reuses its payload buffer. */
     public static void request(DataOutputStream out, long id, long bytes, byte[] chunk, boolean verify) throws IOException {
+        if (id < 1 || bytes < 0 || chunk.length < 1 || chunk.length > CHUNK)
+            throw new IllegalArgumentException("Invalid request ID, size, or chunk buffer");
         begin(out, id, bytes, verify);
         CRC32 crc = new CRC32();
         long remaining = bytes;

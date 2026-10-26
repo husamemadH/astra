@@ -1,0 +1,12 @@
+{
+  "workers": [1, 2, 4, 8],
+  "counters": ["long-adder"],
+  "repetitions": 3,
+  "warmupSeconds": 1.5,
+  "durationSeconds": 3,
+  "drainSeconds": 10,
+  "pipelineDepths": [16],
+  "payloadBytes": 1048576,
+  "metricsIntervalMillis": 500,
+  "overload": false
+}

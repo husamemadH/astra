@@ -23,6 +23,13 @@ class BenchmarkTest {
         assertTrue(Files.readString(directory.resolve("summary.csv")).contains("42.000000"));
         assertTrue(Files.readString(directory.resolve("report.html")).contains("<svg"));
     }
+    @Test void configRejectsTyposInsteadOfSilentlyUsingDefaults() throws Exception {
+        Path file = directory.resolve("config.json");
+        Files.writeString(file, "{\"durationSecond\": 3}");
+        assertThrows(IllegalArgumentException.class, () -> BenchmarkConfig.load(file));
+        Files.writeString(file, "null");
+        assertThrows(IllegalArgumentException.class, () -> BenchmarkConfig.load(file));
+    }
     @Test void resourceBudgetRejectsAnUnsafeMatrix() {
         var c = new BenchmarkConfig(); c.workers = List.of(100); c.maxWorkers = 8;
         assertThrows(IllegalArgumentException.class, c::validate);
