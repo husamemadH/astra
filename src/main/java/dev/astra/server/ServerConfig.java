@@ -13,10 +13,15 @@ public final class ServerConfig {
     public boolean checksum;
     public String counters = "long-adder";
     public long idleTimeoutMillis = 30_000;
+    public long queueTimeoutMillis = 10_000;
+    public int historyCapacity = 10_000;
+    public int socketBufferBytes;
+    public boolean tcpNoDelay = true;
 
     public void validate() {
         dev.astra.metrics.MetricsCounters.create(counters);
         if (host == null || host.isBlank() || port < 0 || port > 65535 || design == null
+                || queueTimeoutMillis < 1 || historyCapacity < 1 || socketBufferBytes < 0
                 || workers < 1 || queueCapacity < 1 || backlog < 1 || maxPayload < 0 || idleTimeoutMillis < 1)
             throw new IllegalArgumentException("Invalid server configuration");
     }
