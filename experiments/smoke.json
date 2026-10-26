@@ -1,0 +1,9 @@
+{
+  "workers": [1, 2],
+  "repetitions": 1,
+  "warmupSeconds": 0.2,
+  "durationSeconds": 0.3,
+  "drainSeconds": 5,
+  "metricsIntervalMillis": 100,
+  "overload": true
+}

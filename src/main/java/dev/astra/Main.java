@@ -1,6 +1,7 @@
 package dev.astra;
 
 import dev.astra.cli.*;
+import dev.astra.benchmark.*;
 import dev.astra.client.*;
 import dev.astra.server.*;
 import dev.astra.metrics.*;
@@ -27,6 +28,7 @@ public final class Main {
                            [--queue-capacity 64] [--counters synchronized|long-adder] [--output DIR]
                     client [--host 127.0.0.1] [--port 9000] [--connections N] [--pipeline-depth 16]
                            [--payload-bytes 1048576] [--warmup-seconds 0] [--duration-seconds 30]
+                    benchmark --config experiments/default.json --output results/run-001
                     Every option takes a value; booleans use true or false. See docs/CLI.md.
                     Server console commands: connections, timeouts, sample, stop.
                     """);
@@ -35,8 +37,17 @@ public final class Main {
         return switch (args[0]) {
             case "server" -> server(args);
             case "client" -> client(args);
+            case "benchmark" -> benchmark(args);
             default -> throw new IllegalArgumentException("Unknown command: " + args[0] + "; use --help");
         };
+    }
+    private static int benchmark(String[] args) throws Exception {
+        var options = new Options(args, 1, "config", "output");
+        var config = options.has("config") ? Json.COMPACT.fromJson(Files.readString(Path.of(options.text("config", ""))), BenchmarkConfig.class) : new BenchmarkConfig();
+        if (config == null) throw new IllegalArgumentException("Benchmark configuration must be a JSON object");
+        var summaries = new BenchmarkRunner(config, Path.of(options.text("output", "results/benchmark"))).run();
+        Json.event("BENCHMARK_COMPLETE", Map.of("trials", summaries.size(), "output", options.text("output", "results/benchmark")));
+        return 0;
     }
     private static int server(String[] args) throws Exception {
         var o = new Options(args, 1, "host", "port", "design", "workers", "queue-capacity", "counters", "backlog",

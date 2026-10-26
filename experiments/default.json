@@ -1,0 +1,13 @@
+{
+  "repetitions": 3,
+  "warmupSeconds": 10,
+  "durationSeconds": 30,
+  "drainSeconds": 30,
+  "pipelineDepths": [16],
+  "payloadBytes": 1048576,
+  "chunkBytes": 65536,
+  "maxWorkers": 128,
+  "maxThreadsPerProcess": 512,
+  "maxRssMiBPerProcess": 1024,
+  "overload": true
+}
