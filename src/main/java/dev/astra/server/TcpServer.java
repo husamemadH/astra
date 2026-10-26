@@ -1,6 +1,9 @@
 package dev.astra.server;
 
 import dev.astra.protocol.Protocol;
+import dev.astra.protocol.ProtocolException;
+import dev.astra.metrics.MetricsCounters;
+import static dev.astra.metrics.MetricsCounters.Counter.*;
 import java.io.*;
 import java.net.*;
 import java.util.Set;
@@ -15,7 +18,7 @@ public final class TcpServer implements AutoCloseable {
     private final ThreadPoolExecutor pool;
     private final Set<Socket> sockets = ConcurrentHashMap.newKeySet();
     private final Set<Thread> handlers = ConcurrentHashMap.newKeySet();
-    private final LongAdder bytes = new LongAdder(), requests = new LongAdder(), rejected = new LongAdder();
+    private final MetricsCounters counters;
     private final AtomicInteger processing = new AtomicInteger(), peakProcessing = new AtomicInteger();
     private volatile boolean running = true;
 
@@ -32,6 +35,7 @@ public final class TcpServer implements AutoCloseable {
     public TcpServer(ServerConfig config) throws IOException {
         config.validate();
         this.config = config;
+        counters = MetricsCounters.create(config.counters);
         listener = new ServerSocket();
         listener.setReuseAddress(true);
         listener.bind(new InetSocketAddress(config.host, config.port), config.backlog);
@@ -47,6 +51,8 @@ public final class TcpServer implements AutoCloseable {
             try {
                 Socket socket = listener.accept();
                 sockets.add(socket);
+                counters.increment(ACCEPTED);
+                counters.increment(ACTIVE);
                 if (!running) { discard(socket); break; }
                 socket.setTcpNoDelay(true);
                 socket.setSoTimeout((int) Math.min(Integer.MAX_VALUE, config.idleTimeoutMillis));
@@ -60,7 +66,7 @@ public final class TcpServer implements AutoCloseable {
                     }
                     case POOL -> {
                         try { pool.execute(task); }
-                        catch (RejectedExecutionException e) { rejected.increment(); discard(socket); }
+                        catch (RejectedExecutionException e) { counters.increment(REJECTED); discard(socket); }
                     }
                 }
             } catch (IOException e) {
@@ -75,10 +81,12 @@ public final class TcpServer implements AutoCloseable {
         try {
             RequestHandler.serve(new BufferedInputStream(socket.getInputStream(), Protocol.CHUNK),
                     socket.getOutputStream(), config.maxPayload, config.checksum, new RequestHandler.Events() {
-                        public void bytes(int count) { bytes.add(count); }
-                        public void completed() { requests.increment(); }
+                        public void bytes(int count) { counters.add(BYTES, count); }
+                        public void completed() { counters.increment(REQUESTS); }
+                        public void failed() { counters.increment(FAILED_REQUESTS); }
                     });
-        } catch (IOException ignored) { /* A failed peer must not stop the acceptor. */ }
+        } catch (ProtocolException e) { counters.increment(PROTOCOL_ERRORS); }
+        catch (IOException e) { if (running) counters.increment(IO_ERRORS); }
         finally {
             processing.decrementAndGet();
             discard(socket);
@@ -87,14 +95,15 @@ public final class TcpServer implements AutoCloseable {
     }
 
     private void discard(Socket socket) {
-        sockets.remove(socket);
+        if (sockets.remove(socket)) { counters.add(ACTIVE, -1); counters.increment(CLOSED); }
         try { socket.close(); } catch (IOException ignored) { }
     }
 
+    public MetricsCounters counters() { return counters; }
     public int port() { return listener.getLocalPort(); }
-    public long bytes() { return bytes.sum(); }
-    public long requests() { return requests.sum(); }
-    public long rejected() { return rejected.sum(); }
+    public long bytes() { return counters.get(BYTES); }
+    public long requests() { return counters.get(REQUESTS); }
+    public long rejected() { return counters.get(REJECTED); }
     public int processing() { return processing.get(); }
     public int peakProcessing() { return peakProcessing.get(); }
     public int queued() { return pool == null ? 0 : pool.getQueue().size(); }
