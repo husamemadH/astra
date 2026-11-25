@@ -14,4 +14,11 @@ class OptionsTest {
     @Test void baselineRejectsMisleadingPoolTuningOptions() {
         assertThrows(IllegalArgumentException.class, () -> Main.run(new String[]{"server","--design","baseline","--workers","4"}));
     }
+    @Test void rejectsInvalidMetricsIntervalsWithoutAnOutputDirectory() {
+        for (String command : new String[]{"server", "client"}) {
+            var error = assertThrows(IllegalArgumentException.class,
+                    () -> Main.run(new String[]{command, "--metrics-interval-ms", "0"}));
+            assertTrue(error.getMessage().contains("--metrics-interval-ms"));
+        }
+    }
 }

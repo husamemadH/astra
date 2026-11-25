@@ -7,10 +7,10 @@ import com.google.gson.*;
 import dev.astra.cli.Json;
 
 public final class BenchmarkConfig {
-    public List<Integer> workers = defaultWorkers();
+    public int repetitions = 3, maxWorkers = 64, maxThreadsPerProcess = 512, maxRssMiBPerProcess = 1024;
+    public List<Integer> workers = defaultWorkers(maxWorkers);
     public List<Integer> pipelineDepths = List.of(16);
     public List<String> counters = List.of("synchronized", "long-adder");
-    public int repetitions = 3, maxWorkers = 64, maxThreadsPerProcess = 512, maxRssMiBPerProcess = 1024;
     public double warmupSeconds = 10, durationSeconds = 30, drainSeconds = 30;
     public long payloadBytes = 1L << 20, seed = 20261026;
     public int chunkBytes = 65_536, queueCapacity = 64, metricsIntervalMillis = 1000;
@@ -26,13 +26,15 @@ public final class BenchmarkConfig {
         for (String key : parsed.getAsJsonObject().keySet())
             if (!fields.contains(key)) throw new IllegalArgumentException("Unknown benchmark setting: " + key);
         BenchmarkConfig config = Json.COMPACT.fromJson(parsed, BenchmarkConfig.class);
+        if (!parsed.getAsJsonObject().has("workers")) config.workers = defaultWorkers(config.maxWorkers);
         config.validate();
         return config;
     }
 
-    private static List<Integer> defaultWorkers() {
+    private static List<Integer> defaultWorkers(int maxWorkers) {
         int p = Runtime.getRuntime().availableProcessors();
-        return new TreeSet<>(List.of(1, 2, 4, 8, p, 2 * p, 4 * p)).stream().toList();
+        return new TreeSet<>(List.of(1, 2, 4, 8, p, 2 * p, 4 * p)).stream()
+                .filter(workers -> workers <= maxWorkers).toList();
     }
     public void validate() {
         if (workers == null || workers.isEmpty() || workers.stream().anyMatch(w -> w == null || w < 1 || w > maxWorkers)

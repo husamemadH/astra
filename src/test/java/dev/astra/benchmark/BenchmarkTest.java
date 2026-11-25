@@ -34,4 +34,11 @@ class BenchmarkTest {
         var c = new BenchmarkConfig(); c.workers = List.of(100); c.maxWorkers = 8;
         assertThrows(IllegalArgumentException.class, c::validate);
     }
+    @Test void omittedWorkersUseTheConfiguredBudget() throws Exception {
+        Path file = directory.resolve("config.json");
+        Files.writeString(file, "{\"maxWorkers\":2}");
+        assertEquals(List.of(1, 2), BenchmarkConfig.load(file).workers);
+        Files.writeString(file, "{\"maxWorkers\":2,\"workers\":[1,4]}");
+        assertThrows(IllegalArgumentException.class, () -> BenchmarkConfig.load(file));
+    }
 }

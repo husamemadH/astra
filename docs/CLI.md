@@ -1,6 +1,6 @@
 # Running Astra
 
-Use Java 21 or later. `./mvnw clean verify` creates `target/astra.jar`.
+Use a JDK, version 21 or later. `./mvnw clean verify` creates `target/astra.jar`.
 
 Start a server in one terminal:
 
@@ -14,7 +14,7 @@ Run traffic in another:
 java -jar target/astra.jar client --connections 4 --pipeline-depth 16 --warmup-seconds 2 --duration-seconds 10 --output results/manual-client
 ```
 
-Type `connections`, `timeouts`, or `sample` in the server terminal to inspect it; type `stop` to drain and exit. Standard input EOF also stops it. Output is one JSON event per line. It is intended to be both readable and machine-parseable. Without an output directory, no result files are written.
+Type `connections`, `timeouts`, or `sample` in the server terminal to inspect it. The server drains and emits `STOPPED` after `stop`, standard input EOF, or a JVM shutdown signal such as SIGTERM. Signal-based exit codes follow the JVM and OS conventions. Output is one JSON event per line. Without an output directory, no result files are written.
 
 All options take explicit values; for example `--checksum true`. Unknown or repeated options are errors. Exit code 0 means success, 1 means an incomplete workload/drain, and 2 means configuration or execution failure.
 
@@ -49,7 +49,7 @@ The client measures ACK goodput within its time window. Latencies cover requests
 java -jar target/astra.jar benchmark --config experiments/default.json --output results/run-001
 ```
 
-The output directory must be empty. Configurations are JSON with the fields documented in `BenchmarkConfig.java`; omitted fields use its defaults. `workers` defaults to unique `{1,2,4,8,P,2P,4P}`. The runner tests all three designs and both counter modes unless `counters` is explicitly narrowed. Fixed-pool connections equal workers; the thread-per-connection design uses the matching connection count; baseline uses one.
+The output directory must be empty. Configurations are JSON with the fields documented in `BenchmarkConfig.java`. Omitted fields use its defaults. If `workers` is omitted, the runner selects the unique values from `{1,2,4,8,P,2P,4P}` that fit within `maxWorkers`, where P is the JVM's available processor count. Explicit worker counts must all fit within the budget. The runner tests all three designs and both counter modes unless `counters` is explicitly narrowed. Fixed-pool connections equal workers. The thread-per-connection design uses the matching connection count, and the baseline uses one.
 
 A run has an external deadline of warm-up + measurement + drain + 30 seconds for startup/control. `maxWorkers` bounds the experiment matrix, while `maxThreadsPerProcess` and `maxRssMiBPerProcess` abort runaway child processes on Linux. These are runner safeguards, not a concurrency cap inside the unbounded server. OS resource checks are unavailable off Linux; deadlines still apply. `serverJvmArgs` and `clientJvmArgs` allow explicit heap/GC/profiling controls and are passed as argument lists, without a shell.
 

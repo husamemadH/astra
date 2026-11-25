@@ -9,6 +9,8 @@ import java.io.*;
 import java.nio.file.*;
 import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 public final class Main {
     private Main() {}
@@ -67,12 +69,27 @@ public final class Main {
         c.socketBufferBytes = o.integer("socket-buffer-bytes", 0); c.tcpNoDelay = o.bool("tcp-no-delay", true);
         double drain = o.decimal("drain-seconds", 30);
         if (!Double.isFinite(drain) || drain < 0 || drain > 86_400) throw new IllegalArgumentException("Invalid drain-seconds");
+        var drainTimeout = Duration.ofNanos((long) (drain * 1e9));
+        long metricsInterval = metricsInterval(o);
         Path output = o.has("output") ? Path.of(o.text("output", "")) : null;
-        try (var server = new TcpServer(c)) {
-            Thread hook = new Thread(() -> { try { server.close(); } catch (IOException ignored) { } }, "astra-shutdown");
+        try (var server = new TcpServer(c);
+             var sampler = output == null ? null : new MetricsSampler(output.resolve("server-samples.csv"),
+                     metricsInterval, () -> sample(server))) {
+            var shutdown = new FutureTask<>(() -> {
+                boolean complete = server.shutdown(drainTimeout);
+                var finalState = Map.of("complete", complete, "metrics", sample(server), "connections", server.registry().snapshot());
+                if (output != null) Json.write(output.resolve("server-final.json"), finalState);
+                Json.event("STOPPED", finalState);
+                return complete;
+            });
+            Thread hook = new Thread(() -> {
+                shutdown.run();
+                try { shutdown.get(); }
+                catch (ExecutionException e) { System.err.println("Astra: " + e.getCause().getMessage()); }
+                catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+            }, "astra-shutdown");
             Runtime.getRuntime().addShutdownHook(hook);
-            try (var sampler = output == null ? null : new MetricsSampler(output.resolve("server-samples.csv"),
-                    o.longValue("metrics-interval-ms", 1000), () -> sample(server))) {
+            try {
                 var ready = Map.of("port", server.port(), "protocol", 1, "config", c, "environment", ProcessMetrics.environment());
                 if (output != null) Json.write(output.resolve("server-config.json"), ready);
                 Json.event("READY", ready);
@@ -86,13 +103,18 @@ public final class Main {
                         Json.event(command.equals("sample") ? "SAMPLE" : command.substring(7), sample(server));
                     else Json.event("COMMAND_ERROR", "Expected connections, timeouts, sample, or stop");
                 }
-                boolean complete = server.shutdown(Duration.ofNanos((long) (drain * 1e9)));
-                var finalState = Map.of("complete", complete, "metrics", sample(server), "connections", server.registry().snapshot());
-                if (output != null) Json.write(output.resolve("server-final.json"), finalState);
-                Json.event("STOPPED", finalState);
-                return complete ? 0 : 1;
-            } finally { Runtime.getRuntime().removeShutdownHook(hook); }
+                shutdown.run();
+                return shutdown.get() ? 0 : 1;
+            } finally {
+                try { Runtime.getRuntime().removeShutdownHook(hook); }
+                catch (IllegalStateException ignored) { /* JVM shutdown already started. */ }
+            }
         }
+    }
+    private static long metricsInterval(Options options) {
+        long interval = options.longValue("metrics-interval-ms", 1000);
+        if (interval < 1) throw new IllegalArgumentException("--metrics-interval-ms must be positive");
+        return interval;
     }
     public static Map<String, Object> sample(TcpServer server) {
         var values = new LinkedHashMap<>(ProcessMetrics.snapshot()); values.putAll(server.snapshot()); return values;
@@ -109,10 +131,11 @@ public final class Main {
         c.checksum = o.bool("checksum", c.checksum); c.socketBufferBytes = o.integer("socket-buffer-bytes", 0);
         c.tcpNoDelay = o.bool("tcp-no-delay", true); c.connectTimeoutMillis = o.integer("connect-timeout-ms", c.connectTimeoutMillis);
         c.validate();
+        long metricsInterval = metricsInterval(o);
         Path output = o.has("output") ? Path.of(o.text("output", "")) : null;
         if (output != null) Json.write(output.resolve("client-config.json"), Map.of("config", c, "environment", ProcessMetrics.environment()));
         try (var sampler = output == null ? null : new MetricsSampler(output.resolve("client-samples.csv"),
-                o.longValue("metrics-interval-ms", 1000), ProcessMetrics::snapshot)) {
+                metricsInterval, ProcessMetrics::snapshot)) {
             var result = new LoadClient(c).run(phase -> Json.event(phase, ProcessMetrics.snapshot()));
             if (output != null) Json.write(output.resolve("client-result.json"), result);
             Json.event("RESULT", result);

@@ -61,8 +61,13 @@ public final class LoadClient {
             latencies.merge(c.latencies); peak = Math.max(peak, c.peak.get());
             send = c.sendBuffer; receive = c.receiveBuffer;
         }
-        long failed = started.sum() - acknowledged.sum();
-        return new Result(connectionFailures.get() == 0 && failed == 0, started.sum(), acknowledged.sum(), failed,
+        long totalStarted = started.sum();
+        long totalAcknowledged = acknowledged.sum();
+        long failed = totalStarted - totalAcknowledged;
+        if (totalStarted == 0 && connectionFailures.get() == 0)
+            errors.add("No requests started; increase --duration-seconds");
+        boolean complete = connectionFailures.get() == 0 && failed == 0 && totalStarted > 0;
+        return new Result(complete, totalStarted, totalAcknowledged, failed,
                 measuredStarted.sum(), measuredAcknowledged.sum(), measuredStarted.sum() - measuredAcknowledged.sum(),
                 windowBytes.sum(), config.durationSeconds, windowBytes.sum() / 1048576.0 / config.durationSeconds,
                 windowRequests.sum() / config.durationSeconds, latencies.percentileMillis(50), latencies.percentileMillis(95),

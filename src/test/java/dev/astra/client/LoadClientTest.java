@@ -45,6 +45,20 @@ class LoadClientTest {
             assertTrue(Thread.getAllStackTraces().keySet().stream().noneMatch(t -> t.isAlive() && t.getName().startsWith("astra-client-")));
         }
     }
+    @Test void reportsIncompleteWhenNoRequestsWereSent() throws Exception {
+        var config = new ServerConfig();
+        config.port = 0;
+        try (var server = new TcpServer(config)) {
+            var client = new ClientConfig();
+            client.port = server.port();
+            client.durationSeconds = 0.5e-9;
+            var result = new LoadClient(client).run(phase -> {});
+            assertFalse(result.complete());
+            assertEquals(0, result.started());
+            assertEquals(0, result.connectionFailures());
+            assertTrue(result.errors().stream().anyMatch(error -> error.contains("No requests started")));
+        }
+    }
     @Test void histogramUsesBoundedBucketsAndPreservesCountWhenMerged() {
         var a = new LatencyHistogram(); var b = new LatencyHistogram();
         for (int i = 1; i <= 100; i++) (i <= 50 ? a : b).record(i * 1_000_000L);

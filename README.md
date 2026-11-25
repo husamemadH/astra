@@ -6,7 +6,7 @@ Astra implements the same streaming TCP protocol with three Java 21 server desig
 
 ## Build and try it
 
-Install Java 21 or later. The Maven Wrapper supplies Maven; the first build downloads dependencies.
+Install a JDK, version 21 or later. The Maven Wrapper supplies Maven; the first build downloads dependencies.
 
 ```sh
 ./mvnw clean verify
@@ -38,4 +38,4 @@ Open `results/smoke/report.html`. The smoke run checks functionality; its short 
 
 All application traffic uses TCP. The runner controls local JVMs through process pipes. No account, database, web service, or GUI is needed to build or run Astra.
 
-The final Java 21 build passes 38 tests, including a 500 MiB transfer in a 128 MiB test JVM. GitHub Actions runs the tests and a separate-JVM smoke benchmark. Annotated tags `lesson-01` through `lesson-12` identify the learning checkpoints.
+The Java 21 test suite includes a 500 MiB transfer in a 128 MiB test JVM. GitHub Actions runs the tests and a separate-JVM smoke benchmark. Annotated tags `lesson-01` through `lesson-12` identify the learning checkpoints.
