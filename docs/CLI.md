@@ -16,6 +16,8 @@ java -jar target/astra.jar client --connections 4 --pipeline-depth 16 --warmup-s
 
 Type `connections`, `timeouts`, or `sample` in the server terminal to inspect it. The server drains and emits `STOPPED` after `stop`, standard input EOF, or a JVM shutdown signal such as SIGTERM. Signal-based exit codes follow the JVM and OS conventions. Output is one JSON event per line. Without an output directory, no result files are written.
 
+The `READY` event includes the actual bound port and server configuration. With `--output`, `server-config.json` also records the full environment details. The client ends the run early if all connections fail and reports the errors in `RESULT`.
+
 All options take explicit values; for example `--checksum true`. Unknown or repeated options are errors. Exit code 0 means success, 1 means an incomplete workload/drain, and 2 means configuration or execution failure.
 
 | Server option | Default / meaning |

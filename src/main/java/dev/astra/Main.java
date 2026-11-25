@@ -90,12 +90,16 @@ public final class Main {
             }, "astra-shutdown");
             Runtime.getRuntime().addShutdownHook(hook);
             try {
-                var ready = Map.of("port", server.port(), "protocol", 1, "config", c, "environment", ProcessMetrics.environment());
+                var environment = ProcessMetrics.environment();
+                var ready = Map.of("port", server.port(), "protocol", 1, "config", c, "environment", environment);
                 if (output != null) Json.write(output.resolve("server-config.json"), ready);
+                environment.remove("cpu_info");
+                environment.remove("resource_limits");
                 Json.event("READY", ready);
                 var console = new BufferedReader(new InputStreamReader(System.in));
                 String command;
                 while ((command = console.readLine()) != null) {
+                    command = command.strip();
                     if (command.equals("stop")) break;
                     if (command.equals("connections")) Json.event("CONNECTIONS", server.registry().snapshot());
                     else if (command.equals("timeouts")) Json.event("TIMEOUTS", server.registry().timeoutReport(c.idleTimeoutMillis));

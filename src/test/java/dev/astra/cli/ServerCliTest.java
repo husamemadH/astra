@@ -37,4 +37,37 @@ class ServerCliTest {
             if (server.isAlive()) server.destroyForcibly().waitFor(5, TimeUnit.SECONDS);
         }
     }
+
+    @Test void startupKeepsDetailedMetadataOnDiskAndConsoleAcceptsPaddedCommands() throws Exception {
+        Path stdout = directory.resolve("stdout.jsonl");
+        Path stderr = directory.resolve("stderr.log");
+        Path output = directory.resolve("results");
+        String java = Path.of(System.getProperty("java.home"), "bin", "java").toString();
+        Process server = new ProcessBuilder(java, "-cp", System.getProperty("java.class.path"),
+                Main.class.getName(), "server", "--port", "0", "--output", output.toString())
+                .redirectOutput(stdout.toFile()).redirectError(stderr.toFile()).start();
+        try {
+            var commands = server.outputWriter();
+            commands.write(" sample \n stop \n");
+            commands.flush();
+            assertTrue(server.waitFor(5, TimeUnit.SECONDS), "Server did not exit after the padded stop command");
+            assertEquals(0, server.exitValue(), Files.readString(stderr));
+            var events = Files.readAllLines(stdout);
+            assertEquals(3, events.size());
+            var ready = JsonParser.parseString(events.getFirst()).getAsJsonObject();
+            assertEquals("READY", ready.get("event").getAsString());
+            var data = ready.getAsJsonObject("data");
+            assertTrue(data.get("port").getAsInt() > 0);
+            assertFalse(data.getAsJsonObject("environment").has("cpu_info"));
+            assertFalse(data.getAsJsonObject("environment").has("resource_limits"));
+            var saved = JsonParser.parseString(Files.readString(output.resolve("server-config.json"))).getAsJsonObject();
+            assertEquals(data.get("port"), saved.get("port"));
+            assertTrue(saved.getAsJsonObject("environment").has("cpu_info")
+                    || saved.getAsJsonObject("environment").has("/proc/cpuinfo"));
+            assertTrue(events.get(1).contains("\"event\":\"SAMPLE\""));
+            assertTrue(events.getLast().contains("\"event\":\"STOPPED\""));
+        } finally {
+            if (server.isAlive()) server.destroyForcibly().waitFor(5, TimeUnit.SECONDS);
+        }
+    }
 }

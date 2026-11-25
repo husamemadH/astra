@@ -19,15 +19,20 @@ In another terminal:
 java -jar target/astra.jar client --connections 4 --pipeline-depth 16 --duration-seconds 10
 ```
 
-Type `connections`, `timeouts`, or `sample` in the server terminal to inspect state. Type `stop` after the client finishes. To compare other designs, use `--design baseline` or `--design thread-per-connection` and omit `--workers`.
+Keep the server running in its terminal. Wait for the `READY` event before starting the client. If port 9000 is occupied, pass the same alternate `--port` to both commands.
+
+Type `connections`, `timeouts`, or `sample` in the server terminal to inspect state. Type `stop` after the client finishes. For `--design baseline`, omit `--workers` and run the client with `--connections 1`. For `--design thread-per-connection`, omit `--workers` and keep all four connections.
 
 ## Run an experiment
 
 ```sh
-java -jar target/astra.jar benchmark --config experiments/smoke.json --output results/smoke
+mkdir -p results
+smoke_output=$(mktemp -d results/smoke.XXXXXX)
+java -jar target/astra.jar benchmark --config experiments/smoke.json --output "$smoke_output" &&
+  printf 'Open %s/report.html\n' "$smoke_output"
 ```
 
-Open `results/smoke/report.html`. The smoke run checks functionality; its short measurements are not performance conclusions. Use `experiments/default.json` for longer repeated trials. The output includes raw CSV samples, JSON configuration and summaries, per-process logs, and standalone SVG charts in an HTML report.
+Open the printed `report.html` path in a browser. Each run gets its own directory, so you can repeat the command after a rehearsal. Use the [saved measurements](docs/RESULTS.md) to present the scaling results and the smoke run to demonstrate the workflow. Use `experiments/default.json` for longer repeated trials. The output includes raw CSV samples, JSON configuration and summaries, per-process logs, and standalone SVG charts in an HTML report.
 
 - [Study guide](docs/STUDY_GUIDE.md): the reading order and exercises.
 - [Architecture](docs/ARCHITECTURE.md): how one request moves through the system.

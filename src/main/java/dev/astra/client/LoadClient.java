@@ -3,6 +3,7 @@ package dev.astra.client;
 import dev.astra.protocol.Protocol;
 import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -22,26 +23,30 @@ public final class LoadClient {
     private final List<String> errors = Collections.synchronizedList(new ArrayList<>());
     private final LongAdder started = new LongAdder(), acknowledged = new LongAdder(), measuredStarted = new LongAdder(),
             measuredAcknowledged = new LongAdder(), windowBytes = new LongAdder(), windowRequests = new LongAdder();
-    private final AtomicInteger connectionFailures = new AtomicInteger();
+    private final CountDownLatch allConnectionsFailed;
     private volatile long windowStart, windowEnd;
     private final CountDownLatch go = new CountDownLatch(1);
 
-    public LoadClient(ClientConfig config) { config.validate(); this.config = config; }
+    public LoadClient(ClientConfig config) {
+        config.validate();
+        this.config = config;
+        allConnectionsFailed = new CountDownLatch(config.connections);
+    }
 
     /** Phase events let the external runner sample the separate server JVM at window boundaries. */
     public Result run(Consumer<String> phase) throws InterruptedException {
         try {
             for (int i = 0; i < config.connections; i++) {
                 try { connections.add(new Connection(i)); }
-                catch (IOException e) { recordFailure("connect: " + e.getMessage()); }
+                catch (IOException e) { recordFailure("connect to " + config.host + ":" + config.port + ": " + e.getMessage()); }
             }
             long now = System.nanoTime();
             windowStart = now + nanos(config.warmupSeconds);
             windowEnd = windowStart + nanos(config.durationSeconds);
             for (Connection c : connections) { c.reader.start(); c.writer.start(); }
             go.countDown();
-            sleepUntil(windowStart); phase.accept("WINDOW_START");
-            sleepUntil(windowEnd); phase.accept("WINDOW_END");
+            waitForPhase(windowStart); phase.accept("WINDOW_START");
+            waitForPhase(windowEnd); phase.accept("WINDOW_END");
             long deadline = windowEnd + nanos(config.drainSeconds);
             for (Connection c : connections) { joinUntil(c.writer, deadline); joinUntil(c.reader, deadline); }
             for (Connection c : connections) {
@@ -64,23 +69,25 @@ public final class LoadClient {
         long totalStarted = started.sum();
         long totalAcknowledged = acknowledged.sum();
         long failed = totalStarted - totalAcknowledged;
-        if (totalStarted == 0 && connectionFailures.get() == 0)
+        int connectionFailures = config.connections - (int) allConnectionsFailed.getCount();
+        if (totalStarted == 0 && connectionFailures == 0)
             errors.add("No requests started; increase --duration-seconds");
-        boolean complete = connectionFailures.get() == 0 && failed == 0 && totalStarted > 0;
+        boolean complete = connectionFailures == 0 && failed == 0 && totalStarted > 0;
         return new Result(complete, totalStarted, totalAcknowledged, failed,
                 measuredStarted.sum(), measuredAcknowledged.sum(), measuredStarted.sum() - measuredAcknowledged.sum(),
                 windowBytes.sum(), config.durationSeconds, windowBytes.sum() / 1048576.0 / config.durationSeconds,
                 windowRequests.sum() / config.durationSeconds, latencies.percentileMillis(50), latencies.percentileMillis(95),
-                latencies.percentileMillis(99), latencies.count(), peak, connectionFailures.get(), send, receive, List.copyOf(errors));
+                latencies.percentileMillis(99), latencies.count(), peak, connectionFailures, send, receive, List.copyOf(errors));
     }
 
     private void recordFailure(String message) {
-        connectionFailures.incrementAndGet();
         synchronized (errors) { if (errors.size() < 20) errors.add(message); }
+        allConnectionsFailed.countDown();
     }
     private static long nanos(double seconds) { return (long) (seconds * 1e9); }
-    private static void sleepUntil(long deadline) throws InterruptedException {
-        long left; while ((left = deadline - System.nanoTime()) > 0) TimeUnit.NANOSECONDS.sleep(left);
+    private void waitForPhase(long deadline) throws InterruptedException {
+        long left = deadline - System.nanoTime();
+        if (left > 0) allConnectionsFailed.await(left, TimeUnit.NANOSECONDS);
     }
     private static void joinUntil(Thread thread, long deadline) throws InterruptedException {
         long left = deadline - System.nanoTime();
@@ -146,6 +153,10 @@ public final class LoadClient {
                     if (ack == null) {
                         if (!writingDone || !pending.isEmpty()) fail("connection closed before all replies (possible admission refusal)");
                         return;
+                    }
+                    if (ack.type() == Protocol.ERROR) {
+                        String diagnostic = new String(ack.data(), ack.offset(), ack.size(), StandardCharsets.UTF_8);
+                        throw new IOException("Server rejected request " + ack.id() + " (code " + ack.value() + "): " + diagnostic);
                     }
                     Pending request = pending.peek();
                     if (request == null || ack.type() != Protocol.ACK || ack.id() != request.id() || ack.value() != config.payloadBytes)

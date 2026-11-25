@@ -4,7 +4,11 @@ import dev.astra.server.*;
 import dev.astra.protocol.Protocol;
 import org.junit.jupiter.api.Test;
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LoadClientTest {
@@ -43,6 +47,37 @@ class LoadClientTest {
             assertFalse(result.complete()); assertTrue(result.failedRequests() > 0);
             assertEquals(1, result.connectionFailures());
             assertTrue(Thread.getAllStackTraces().keySet().stream().noneMatch(t -> t.isAlive() && t.getName().startsWith("astra-client-")));
+        }
+    }
+    @Test void connectionRefusalEndsWarmupAndMeasurementImmediately() throws Exception {
+        try (var unlistened = new Socket()) {
+            unlistened.bind(new InetSocketAddress("127.0.0.1", 0));
+            var client = new ClientConfig();
+            client.port = unlistened.getLocalPort();
+            client.warmupSeconds = 30;
+            var phases = new ArrayList<String>();
+            var result = assertTimeoutPreemptively(Duration.ofSeconds(5),
+                    () -> new LoadClient(client).run(phases::add));
+            assertFalse(result.complete());
+            assertEquals(1, result.connectionFailures());
+            assertEquals(List.of("WINDOW_START", "WINDOW_END"), phases);
+            assertTrue(result.errors().getFirst().contains("127.0.0.1:" + client.port));
+        }
+    }
+    @Test void serverRejectionEndsMeasurementWithItsDiagnostic() throws Exception {
+        var config = new ServerConfig();
+        config.port = 0;
+        try (var server = new TcpServer(config)) {
+            var client = new ClientConfig();
+            client.port = server.port();
+            client.checksum = true;
+            client.payloadBytes = 0;
+            client.pipelineDepth = 1;
+            var result = assertTimeoutPreemptively(Duration.ofSeconds(5),
+                    () -> new LoadClient(client).run(phase -> {}));
+            assertFalse(result.complete());
+            assertEquals(1, result.failedRequests());
+            assertTrue(result.errors().getFirst().contains("Payload limit or checksum mode mismatch"));
         }
     }
     @Test void reportsIncompleteWhenNoRequestsWereSent() throws Exception {
