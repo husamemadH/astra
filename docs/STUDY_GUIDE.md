@@ -2,28 +2,28 @@
 
 A socket is one endpoint of a TCP conversation. A thread is one independently scheduled path through the program. A queue holds work until a thread is available. Start with those three ideas; you do not need to understand the final benchmark all at once.
 
-The numbered commits form a runnable course. Each implementation stage passed its relevant tests before the next stage was saved. List them in their original order:
+Try the [quickstart](../README.md#build-and-try-it) once so you can see a successful upload and its counters. The tags `lesson-01` through `lesson-12` follow the order below. Each tag has the code, lesson notes, and tests for that stage.
 
 ```sh
-git log --reverse --oneline
+git tag --list 'lesson-*' --sort=refname
 ```
 
-Read one commit without changing your files:
+Read a lesson's commit and its entry point from the main checkout.
 
 ```sh
-git show <commit>
-git show <commit>:src/main/java/dev/astra/Main.java
+git show lesson-03
+git show lesson-03:src/main/java/dev/astra/Main.java
 ```
 
-To run an earlier stage without disturbing the main checkout:
+To run that lesson in its own checkout, use a Git worktree.
 
 ```sh
-git worktree add --detach ../astra-lesson <commit>
-cd ../astra-lesson
+git worktree add --detach ../astra-lesson-03 lesson-03
+cd ../astra-lesson-03
 ./mvnw clean verify
 ```
 
-Use the lesson and commands **from that commit**: the CLI evolves from positional arguments into named options in lesson 08. Remove the temporary checkout later with `git worktree remove ../astra-lesson` from the main checkout.
+Use the instructions in `docs/lessons/03-baseline.md` inside that checkout. Lesson 03 uses positional arguments. Lesson 08 introduces the named options shown in the quickstart. When you finish with the example, run `git worktree remove ../astra-lesson-03` from the main checkout.
 
 | Stage | Read | What you should understand before continuing |
 | --- | --- | --- |
@@ -68,8 +68,4 @@ Useful focused commands:
 
 Read [ARCHITECTURE.md](ARCHITECTURE.md) when you want the complete picture. Return to the small lesson files whenever the full code feels too dense.
 
-The final [results lesson](lessons/12-results.md) explains the saved measurements and controlled follow-ups. Annotated tags `lesson-01` through `lesson-12` let you use names instead of hashes; for example:
-
-```sh
-git worktree add --detach ../astra-lesson lesson-03
-```
+The final [results lesson](lessons/12-results.md) explains the saved measurements and controlled follow-ups.

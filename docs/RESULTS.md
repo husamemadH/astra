@@ -79,7 +79,7 @@ Pipelining changes how much waiting can overlap. With one request outstanding, t
 
 In each counter mode, the overload experiment holds W=1 processing connection and Q=1 queued connection. The third socket is refused. After the held connections close, a fourth connection successfully uploads 1,024 bytes. Final counters report accepted=4, closed=4, rejected=1, active=0, peak processing=1, and peak queue=1. The raw active/history snapshot and final evidence are saved under the primary suite's `overload-*` directories.
 
-All 38 automated Java tests pass on Java 21. They verify fragmented/coalesced frames, invalid input, ordered pipelining, both counter implementations, lifecycle and queue races, idle cleanup, history eviction, resets, and shutdown cleanup. A 500 MiB request succeeds in a JVM limited to a 128 MiB heap, demonstrating streaming memory use.
+The Java 21 test suite covers fragmented and coalesced frames, invalid input, ordered pipelining, both counter implementations, lifecycle and queue races, idle cleanup, history eviction, resets, and shutdown cleanup. A 500 MiB request succeeds in a JVM limited to a 128 MiB heap, demonstrating streaming memory use. See [GitHub Actions](https://github.com/husamemadH/astra/actions/workflows/build.yml) for current build and smoke results.
 
 ## What to study next
 

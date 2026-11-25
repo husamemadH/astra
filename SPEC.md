@@ -4,7 +4,7 @@
 
 Implement a Java client/server benchmark that demonstrates how TCP throughput changes as server worker count increases, identifies the observed throughput ceiling, and explains the bottleneck using measurements.
 
-Source: `/home/husamemad/Downloads/astra.docx`. Java is an explicit user requirement. The source requires the server designs and capabilities listed below; wire format, defaults, module names, benchmark procedure, and retention policies in this specification are implementation decisions that make those requirements concrete.
+The original Astra brief (`astra.docx`) required Java and the server designs and capabilities listed below. This specification records the acceptance criteria and the implementation choices for wire format, defaults, module names, benchmark procedure, and retention policies.
 
 The deliverable is an executable experiment, reproducible results, and an explanation of the measured scaling curve. Do not assume throughput will increase monotonically or claim a bottleneck without supporting evidence.
 
